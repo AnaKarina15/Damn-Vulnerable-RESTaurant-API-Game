@@ -12,7 +12,6 @@ router = APIRouter()
 
 
 class UserUpdate(BaseModel):
-    username: str
     first_name: Union[str, None] = None
     last_name: Union[str, None] = None
     phone_number: Union[str, None] = None
@@ -24,7 +23,7 @@ def update_profile(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Session = Depends(get_db),
 ):
-    db_user = get_user_by_username(db, user.username)
+    db_user = current_user
 
     for var, value in user.dict().items():
         if value:
