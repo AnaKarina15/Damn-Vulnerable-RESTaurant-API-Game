@@ -21,6 +21,7 @@ def _image_url_to_base64(image_url: str):
     return encoded_image
 
 
+
 def create_menu_item(
     db,
     menu_item: schemas.MenuItemCreate,
