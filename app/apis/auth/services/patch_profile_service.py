@@ -19,7 +19,7 @@ class UserRead(BaseModel):
     role: str
 
 
-class UserUpdate(BaseModel, extra=Extra.allow):
+class UserUpdate(BaseModel, extra=Extra.forbid):
     # we use extra=Extra.allow in the model
     # it allows for extra fields passed in HTTP request body
     # so we don't need to specify all fields
