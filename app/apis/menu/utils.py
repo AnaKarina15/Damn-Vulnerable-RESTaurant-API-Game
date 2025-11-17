@@ -7,15 +7,22 @@ from fastapi import HTTPException
 
 
 def _image_url_to_base64(image_url: str):
-    from urllib.parse import urlparse
+    parsed_url = urlparse(image_url)
+    domain = parsed_url.hostname or ""
+    allowed_domains = ["localhost", "cdn.example.com"]
+    valid_extensions = (".jpg", ".jpeg", ".png")
 
-    if urlparse(image_url).hostname not in ["cdn.example.com"]:
-        return None
+    if domain not in allowed_domains:
+        raise HTTPException(status_code=400, delail="Invalid domain in image_url.")
+    
+    if not parsed_url.path.lower().endswith(valid_extensions):
+        raise HTTPException(status_code=400, delail="Invalid image file extension in image_url.")
 
     response = requests.get(image_url, stream=True)
+    content_type = response.headers.get("Content-Type", "")
 
-    if "image/" not in response.headers.get("Content-Type", ""):
-        return None
+    if not content_type.startswith("image"):
+        raise HTTPException(status_code=400, detail="URL does not point to an image.")
 
     encoded_image = base64.b64encode(response.content).decode()
     return encoded_image
