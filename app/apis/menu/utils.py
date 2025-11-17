@@ -16,7 +16,7 @@ def _image_url_to_base64(image_url: str):
         raise HTTPException(status_code=400, delail="Invalid domain in image_url.")
     
     if not parsed_url.path.lower().endswith(valid_extensions):
-        raise HTTPException(status_code=400, delail="Invalid image file extension iwn image_url.")
+        raise HTTPException(status_code=400, delail="Invalid image file extension in image_url.")
 
     response = requests.get(image_url, stream=True)
     content_type = response.headers.get("Content-Type", "")
